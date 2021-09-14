@@ -6,6 +6,8 @@
 - `npm run gen` to generate the pb JS + TS files
 - `npm run compile` to see the TypeScript compiler error/faillure
 
+You can also `./gen.sh` to see the issue occur when calling `protoc` directly.
+
 ## Issue
 
 `proto/test.proto` includes a message named `Map` and a message that implements a map internally:
