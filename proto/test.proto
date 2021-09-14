@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package test;
+
+message Map {
+    string key = 1;
+    string value = 2;
+}
+
+message Foo {
+    map<string, string> fields = 1;
+}

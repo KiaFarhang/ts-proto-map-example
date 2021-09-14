@@ -1,0 +1,22 @@
+{
+  "name": "ts-protoc-gen-map-example",
+  "version": "0.0.0",
+  "description": "Demonstrate an issue with ts-protoc-gen",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "gen": "grpc_tools_node_protoc --proto_path=proto --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:src/proto --ts_out=src/proto proto/test.proto"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.3.7",
+    "google-protobuf": "^3.18.0-rc.2"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.15.5",
+    "grpc-tools": "^1.11.2",
+    "protoc-gen-ts": "^0.5.0",
+    "typescript": "^4.4.3"
+  }
+}
