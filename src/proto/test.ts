@@ -6,6 +6,7 @@
  * buymeacoffee: https://www.buymeacoffee.com/thesayyn
  *  */
 import * as pb_1 from "google-protobuf";
+import * as grpc_1 from "@grpc/grpc-js";
 export namespace test {
     export class Map extends pb_1.Message {
         constructor(data?: any[] | {
@@ -146,6 +147,90 @@ export namespace test {
         }
         static deserializeBinary(bytes: Uint8Array): Foo {
             return Foo.deserialize(bytes);
+        }
+    }
+    export class Response extends pb_1.Message {
+        constructor(data?: any[] | {
+            code?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], []);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("code" in data && data.code != undefined) {
+                    this.code = data.code;
+                }
+            }
+        }
+        get code() {
+            return pb_1.Message.getField(this, 1) as string;
+        }
+        set code(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        toObject() {
+            const data: {
+                code?: string;
+            } = {};
+            if (this.code != null) {
+                data.code = this.code;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (typeof this.code === "string" && this.code.length)
+                writer.writeString(1, this.code);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Response {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Response();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.code = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): Response {
+            return Response.deserialize(bytes);
+        }
+    }
+    export abstract class UnimplementedTestServiceService {
+        static definition = {
+            DoThing: {
+                path: "/test.TestService/DoThing",
+                requestStream: false,
+                responseStream: false,
+                requestSerialize: (message: Map) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => Map.deserialize(new Uint8Array(bytes)),
+                responseSerialize: (message: Response) => Buffer.from(message.serialize()),
+                responseDeserialize: (bytes: Buffer) => Response.deserialize(new Uint8Array(bytes))
+            }
+        };
+        [method: string]: grpc_1.UntypedHandleCall;
+        abstract DoThing(call: grpc_1.ServerUnaryCall<Map, Response>, callback: grpc_1.requestCallback<Response>): void;
+    }
+    export class TestServiceClient extends grpc_1.makeGenericClientConstructor(UnimplementedTestServiceService.definition, "TestService", {}) {
+        constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
+            super(address, credentials, options)
+        }
+        DoThing(message: Map, metadata: grpc_1.Metadata, options: grpc_1.CallOptions, callback: grpc_1.requestCallback<Response>): grpc_1.ClientUnaryCall;
+        DoThing(message: Map, metadata: grpc_1.Metadata, callback: grpc_1.requestCallback<Response>): grpc_1.ClientUnaryCall;
+        DoThing(message: Map, options: grpc_1.CallOptions, callback: grpc_1.requestCallback<Response>): grpc_1.ClientUnaryCall;
+        DoThing(message: Map, callback: grpc_1.requestCallback<Response>): grpc_1.ClientUnaryCall;
+        DoThing(message: Map, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<Response>, options?: grpc_1.CallOptions | grpc_1.requestCallback<Response>, callback?: grpc_1.requestCallback<Response>): grpc_1.ClientUnaryCall {
+            return super.DoThing(message, metadata, options, callback);
         }
     }
 }

@@ -10,3 +10,11 @@ message Map {
 message Foo {
     map<string, string> fields = 1;
 }
+
+message Response {
+    string code = 1;
+}
+
+service TestService {
+    rpc DoThing(Map) returns (Response) {}
+}
